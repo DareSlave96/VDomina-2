@@ -184,13 +184,43 @@ class action {
 		}
 	}
 	public static function add_Punishment () {
-	
+		// Cache vars
+		$punishment = strip_tags($_POST['punishment']);
+		$category = $_POST['category'];
+		// Insert into database
+		$db = DBCon();
+		$st = $db -> prepare( "INSERT INTO `Punishments` (`Author`, `Punishment`, `Category`) VALUES ( :auth, :pun, :cat )" );
+		$st -> bindparam( ':auth', $_COOKIE['UN'] );
+		$st -> bindparam( ':pun', $punishment );
+		$st -> bindparam( ':auth', $category );
+		$st -> execute;
+		header( 'Location: ?page=punishments' );
 	}
 	public static function add_Task () {
-	
+		// Cache vars
+		$task = strip_tags($_POST['task']);
+		$category = $_POST['category'];
+		// Insert into database
+		$db = DBCon();
+		$st = $db -> prepare( "INSERT INTO `Tasks` (`Author`, `Task`, `Category`) VALUES ( :auth, :task, :cat )" );
+		$st -> bindparam( ':auth', $_COOKIE['UN'] );
+		$st -> bindparam( ':task', $task );
+		$st -> bindparam( ':auth', $category );
+		$st -> execute;
+		header( 'Location: ?page=tasks' );
 	}
 	public static function add_Reward () {
-	
+		// Cache vars
+		$reward = strip_tags($_POST['reward']);
+		$category = $_POST['category'];
+		// Insert into database
+		$db = DBCon();
+		$st = $db -> prepare( "INSERT INTO `Rewards` (`Author`, `Reward`, `Category`) VALUES ( :auth, :rew, :cat )" );
+		$st -> bindparam( ':auth', $_COOKIE['UN'] );
+		$st -> bindparam( ':rew', $reward );
+		$st -> bindparam( ':auth', $category );
+		$st -> execute;
+		header( 'Location: ?page=rewards' );
 	}
 	public static function updateUserLevel () {
 	
