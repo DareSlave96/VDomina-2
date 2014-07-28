@@ -9,7 +9,7 @@ if ( !isset( $_COOKIE['over18'] ) && $_GET['page'] != "over18" && $_GET['action'
 
 // Database connections
 function DBCon () {
-	return new PDO( 'sqlite: db.sqlite' );
+	return new PDO( 'sqlite:db.sqlite' );
 }
 
 class pages {
@@ -105,17 +105,20 @@ class action {
 		$st -> bindparam( ':Username', $un );
 		$st -> execute();
 		// Check and make sure username available
-		if ( $st === 1 ) {
+		if ( $st -> execute() == 1 ) {
 			// Username correct, get variables from DB query
 			foreach ( $st as $row ) {
 				$db_pw = $row['Password'];
 				$db_dom = $row['DoneDom'];
 				$db_sub = $row['DoneSub'];
+				$db_pnts = $row['Points'];
 			}
 			// Check to make sure passwords match
 			if ( password_verify( $pw, $db_pw ) ) {
-				// Passwords match
-				setcookie( 'UN', $un, time() + 60*60*12 );
+				// Passwords match so fill in info
+				$time = time() + 60*60*12;
+				setcookie( 'points', $db_pnts, $time );
+				setcookie( 'UN', $un, $time );
 				if ( $db_sub === 1 ){
 					// Go to fill in subs details
 					header( 'Location: ?page=prefs&cat=sub' );
@@ -124,24 +127,61 @@ class action {
 					// Go to fill in doms details
 					header( 'Location: ?page=prefs&cat=dom' );
 				}
-				else {
-					// Fill rest of cookies with info
-				}
 			}
 			else {
 				// Passwords don't match
-				echo "Please try again, that username/password combination was incorrect <br><br>";
+				echo "Please try again, that password combination was incorrect <br><br>";
 				pages::login();
 			}
 		}
 		else {
-			echo "Please try again, that username/password combination was incorrect <br><br>";
+			echo "Please try again, that username combination was incorrect <br><br>";
 			pages::login();
 		}
 		
 	}
 	public static function signup () {
-	
+		// Cache vars
+		$pw1 = $_POST['PW1'];
+		$pw2 = $_POST['PW2'];
+		$un = $_POST['UN'];
+		// Check username
+		$db = DBCon();
+		$st = $db -> prepare( 'SELECT * FROM `Users` WHERE `Username` = :UN' );
+		$st -> bindparam( ':UN', $un );
+		$st -> execute();
+		if ( $st -> rowCount() == 0 ) {
+			// Username available
+			if ( $pw1 === $pw2 ){
+				// Passwords match
+				$pw = password_hash( $pw1, PASSWORD_DEFAULT );
+				$st = $db -> prepare( "INSERT INTO `Users` (`Username`, `Password`, `DoneDom`, `DoneSub`) VALUES (:UN, :PW, 1, 1)" );
+				$st -> bindparam( ':UN', $un );
+				$st -> bindparam( ':PW', $pw );
+				$st -> execute();
+				$st = $db -> prepare( "INSERT INTO `Details01` VALUES ( :UN, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 )" );
+				$st -> bindparam( ':UN', $un );
+				$st -> execute();
+				$st = $db -> prepare( "INSERT INTO `Details02` ( `Username` ) VALUES ( :UN )" );
+				$st -> bindparam( ':UN', $un );
+				$st -> execute();
+				$st = $db -> prepare( "INSERT INTO `Details03` VALUES ( :UN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0 )" );
+				$st -> bindparam( ':UN', $un );
+				$st -> execute();
+				$st = $db -> prepare( "INSERT INTO `Details04` VALUES ( :UN, '', '', '', 0 )" );
+				$st -> bindparam( ':UN', $un );
+				$st -> execute();
+				header( 'Location: ?page=prefs&cat=sub' );
+			}
+			else {
+				echo "The passwords do not match, please try again.<br>";
+				pages::login();
+			}
+		}
+		else {
+			echo "We're sorry, that username isn't available, please try another<br>";
+			pages::login();
+		}
 	}
 	public static function add_Punishment () {
 	
