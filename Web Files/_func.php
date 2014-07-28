@@ -44,6 +44,48 @@ class pages {
 		<br>
 		Else, you can <a href="http://google.com/">go to Google</a>
 	<?php }
+	public static function prefs () {
+	
+	}
+	public static function prefs_dom () {
+	
+	}
+	public static function prefs_sub () {
+	
+	}
+	public static function prefs_revPunishments () {
+	
+	}
+	public static function prefs_revRewards () {
+	
+	}
+	public static function prefs_revTasks () {
+	
+	}
+	public static function prefs_manageNews () {
+	
+	}
+	public static function prefs_users () {
+	
+	}
+	public static function prefs_manageStaffMes () {
+	
+	}
+	public static function prefs_changePassword () {
+	
+	}
+	public static function session () {
+	
+	}
+	public static function tasks () {
+	
+	}
+	public static function rewards () {
+	
+	}
+	public static function punishments () {
+	
+	}
 }
 
 class action {
@@ -99,6 +141,60 @@ class action {
 		
 	}
 	public static function signup () {
+	
+	}
+	public static function add_Punishment () {
+	
+	}
+	public static function add_Task () {
+	
+	}
+	public static function add_Reward () {
+	
+	}
+	public static function updateUserLevel () {
+	
+	}
+	public static function fetch_Task () {
+	
+	}
+	public static function fetch_Punishment () {
+	
+	}
+	public static function fetch_Reward () {
+	
+	}
+	public static function update_domPrefs () {
+	
+	}
+	public static function update_subPrefs () {
+	
+	}
+	public static function update_password () {
+	
+	}
+	public static function delete_task ( $ID ) {
+	
+	}
+	public static function delete_reward ( $ID ) {
+	
+	}
+	public static function delete_punishment ( $ID ) {
+	
+	}
+	public static function add_news () {
+	
+	}
+	public static function delete_news ( $ID ) {
+	
+	}
+	public static function add_staffMes () {
+	
+	}
+	public static function Delete_staffMes ( $ID ) {
+	
+	}
+	public static function updatePoints ( $type, $ID ) {
 	
 	}
 }
